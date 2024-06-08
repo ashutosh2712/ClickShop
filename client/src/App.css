@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+:root {
+  --color-white: #fff;
+  --color-bg: rgb(69, 67, 67);
+  --color-bg-variant: rgb(88, 88, 88);
+  --color-success: green;
+  --color-blue: #1e90ff;
+}
+
+body {
+  font-family: "Cinzel", serif;
+}
+
+/* Navbar */
+
+.navContainer {
+  display: flex;
+  background: var(--color-bg);
+  color: var(--color-white);
+  align-items: center;
+  justify-content: space-evenly;
+  height: fit-content;
+}
+
+.navLeft {
+  margin-left: 1rem;
+}
+
+.navCenter {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.navSearch {
+  padding: 0.7rem;
+  width: 60vh;
+}
+
+.btn {
+  padding: 1rem;
+  background: var(--color-success);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: 0.2rem;
+}
+
+.btn:hover {
+  cursor: pointer;
+  padding: 1.05rem;
+  background: var(--color-blue);
+}
+
+.navRight {
+  display: flex;
+  margin-right: 1rem;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.navCart,
+.navAdmin,
+.navUser {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.navCart:hover,
+.navAdmin:hover,
+.navUser:hover {
+  background: var(--color-bg-variant);
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.cartImg {
+  width: 24px;
+  height: 24px;
+}
