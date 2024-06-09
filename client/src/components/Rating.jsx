@@ -2,9 +2,9 @@ import React from "react";
 import halfStar from "../assets/halfStar.png";
 import Star from "../assets/star.png";
 import emptyStar from "../assets/emptyStar.png";
-const Rating = ({ value, text }) => {
+const Rating = ({ value, text, className }) => {
   return (
-    <div className="ratingContainer">
+    <div className={`ratingContainer ${className}`}>
       <span>
         {value >= 1 ? (
           <img src={Star} className="ratingStarImg"></img>

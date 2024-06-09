@@ -54,7 +54,7 @@ const products = [
     brand: "Apex",
     category: "Electronics",
     price: 279.99,
-    countInStock: 11,
+    countInStock: 0,
     rating: 5,
     numReviews: 12,
   },
