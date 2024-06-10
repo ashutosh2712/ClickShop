@@ -8,6 +8,7 @@ import {
   Link,
 } from "react-router-dom";
 import ProductPage from "./pages/Product/ProductPage";
+import Footer from "./components/Footer";
 function App() {
   const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ function App() {
     <>
       <Navbar />
       <RouterProvider router={router} />
+      <Footer />
     </>
   );
 }

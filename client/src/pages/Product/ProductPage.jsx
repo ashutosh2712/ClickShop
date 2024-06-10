@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import products from "../../data/products";
 import Rating from "../../components/Rating";
+import reviews from "../../data/reviews";
 const ProductPage = () => {
   const { id } = useParams();
   const productId = id;
@@ -76,6 +77,44 @@ const ProductPage = () => {
               }
             >
               ADD TO CART
+            </button>
+          </div>
+        </div>
+        <div className="productReviews">
+          <h2>Reviews</h2>
+          {reviews.map((review) => (
+            <div className="productReviewContent">
+              <h4 className="reviewCell">{review.user}</h4>
+              <Rating value={review.rating} className="reviewCell" />
+              <p className="reviewCell">{review.date}</p>
+              <p className="reviewCell">{review.comment}</p>
+            </div>
+          ))}
+
+          <div className="writeReviewContainer">
+            <h3>Write your Review</h3>
+            <div className="ratingSelect">
+              <p>Rating: </p>
+              <select name="rating" id="rating">
+                <option value="rating" selected>
+                  SELECT
+                </option>
+                <option value="rating">1 - Poor</option>
+                <option value="rating">2 - Good</option>
+                <option value="rating">3 - Very Good</option>
+                <option value="rating">4 - Recommended</option>
+                <option value="rating">5 - Awesome</option>
+              </select>
+            </div>
+            <textarea
+              name="comment"
+              id="comment"
+              rows={10}
+              placeholder="Write Your Review"
+              className="reviewText"
+            ></textarea>
+            <button type="submit" className="btn-cart">
+              SUBMIT
             </button>
           </div>
         </div>

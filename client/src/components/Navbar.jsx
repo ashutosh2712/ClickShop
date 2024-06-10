@@ -2,6 +2,7 @@ import React from "react";
 import ShopCart from "../assets/trolley-cart.png";
 import Admin from "../assets/setting.png";
 import Avatar from "../assets/office-man.png";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="navContainer">
