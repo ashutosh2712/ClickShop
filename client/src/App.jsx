@@ -1,30 +1,40 @@
 import "./App.css";
-import Navbar from "./components/Navbar";
+
 import HomePage from "./pages/HomePage";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProductPage from "./pages/Product/ProductPage";
-import Footer from "./components/Footer";
+
+import Layout from "./components/Layout";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "products/:id",
+        element: <ProductPage />,
+      },
+    ],
+  },
+]);
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <HomePage />,
-    },
-    {
-      path: "products/:id",
-      element: <ProductPage />,
-    },
-  ]);
   return (
     <>
-      <Navbar />
       <RouterProvider router={router} />
-      <Footer />
     </>
   );
 }

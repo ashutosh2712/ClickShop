@@ -7,6 +7,16 @@
   text-decoration: none;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button,
+input,
+textarea,
+select {
+  font-family: "Cinzel", serif;
+}
 :root {
   --color-white: #fff;
   --color-bg: rgb(69, 67, 67);
@@ -15,6 +25,7 @@
   --color-blue: #1e90ff;
   --color-btn: #000;
   --border-color: gold;
+  --color-input: rgb(213, 237, 229);
 }
 
 body {
@@ -254,4 +265,32 @@ footer {
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
+}
+
+/*Auth Pages */
+
+.authContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin-top: 3rem;
+  gap: 1rem;
+}
+
+.authFormContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formInput {
+  background: var(--color-input);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ToogleLink {
+  color: var(--color-blue);
 }
