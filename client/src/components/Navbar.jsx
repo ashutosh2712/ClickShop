@@ -24,11 +24,13 @@ const Navbar = () => {
       </div>
 
       <div className="navRight">
-        <div className="navCart">
-          {/* <i className="fas fa-shopping-cart"></i> */}
-          <img src={ShopCart} alt="cart" className="cartImg" />
-          <p>Cart</p>
-        </div>
+        <Link to="/cart">
+          <div className="navCart">
+            {/* <i className="fas fa-shopping-cart"></i> */}
+            <img src={ShopCart} alt="cart" className="cartImg" />
+            <p>Cart</p>
+          </div>
+        </Link>
 
         <div className="navAdmin">
           <img src={Admin} alt="cart" className="cartImg" />
