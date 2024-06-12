@@ -1,6 +1,7 @@
 import React from "react";
 import products from "../data/products";
 import delteIcon from "../assets/delete.png";
+import { Link } from "react-router-dom";
 const CartPage = () => {
   return (
     <div className="cartContainer">
@@ -37,9 +38,11 @@ const CartPage = () => {
             </p>
           </div>
           <div className="cartCheckout">
-            <button type="submit" className="btn-cart">
-              Checkout
-            </button>
+            <Link to="/shipping">
+              <button type="submit" className="btn-cart">
+                Checkout
+              </button>
+            </Link>
           </div>
         </div>
       </div>

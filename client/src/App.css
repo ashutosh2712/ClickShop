@@ -359,3 +359,7 @@ footer {
   align-items: center;
   justify-content: center;
 }
+
+.shippingInput {
+  width: 50vh;
+}
