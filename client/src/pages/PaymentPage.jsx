@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const PaymentPage = () => {
   return (
@@ -9,9 +10,11 @@ const PaymentPage = () => {
         <input type="radio" name="paymentOption" id="paymentOption" checked />
         <small>Select Paypal or Credit Card</small>
       </label>
-      <button type="submit" className="btn-cart">
-        Continue
-      </button>
+      <Link to="/placeorder">
+        <button type="submit" className="btn-cart">
+          Continue
+        </button>
+      </Link>
     </div>
   );
 };

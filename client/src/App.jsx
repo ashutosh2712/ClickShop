@@ -10,6 +10,7 @@ import Register from "./pages/auth/Register";
 import CartPage from "./pages/CartPage";
 import ShippingPage from "./pages/ShippingPage";
 import PaymentPage from "./pages/PaymentPage";
+import PlaceOrderPage from "./pages/PlaceOrderPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
       {
         path: "/payment",
         element: <PaymentPage />,
+      },
+
+      {
+        path: "/placeorder",
+        element: <PlaceOrderPage />,
       },
 
       {

@@ -379,3 +379,38 @@ footer {
   display: flex;
   gap: 0.25rem;
 }
+
+/*PlaceOrder Page */
+.placeOrderContainer {
+  margin-left: 4rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: 65% 35%;
+}
+
+.placeOrderDetails,
+.placeOrderProductDetails {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.placeOrderProductDetails {
+  display: grid;
+  grid-template-columns: 20% 50% 30%;
+  font-weight: 600;
+}
+.placeOrderProductImg {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+.placeOrderSummary {
+  width: fit-content;
+}
+.orderSummaryDetails {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
