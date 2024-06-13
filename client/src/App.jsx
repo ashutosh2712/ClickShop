@@ -9,6 +9,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import CartPage from "./pages/CartPage";
 import ShippingPage from "./pages/ShippingPage";
+import PaymentPage from "./pages/PaymentPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
       {
         path: "/shipping",
         element: <ShippingPage />,
+      },
+
+      {
+        path: "/payment",
+        element: <PaymentPage />,
       },
 
       {

@@ -41,9 +41,11 @@ const ShippingPage = () => {
           placeholder="Your Country"
           className="formInput shippingInput"
         />
-        <button type="submit" className="btn-cart">
-          Continue
-        </button>
+        <Link to="/payment">
+          <button type="submit" className="btn-cart">
+            Continue
+          </button>
+        </Link>
       </form>
       <p>
         Already have an account ?{" "}
