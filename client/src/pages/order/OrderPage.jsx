@@ -1,24 +1,34 @@
 import React from "react";
-import products from "../data/products";
-import { Link } from "react-router-dom";
-const PlaceOrderPage = () => {
+import products from "../../data/products";
+import PaypalImg from "../../assets/StandardCheckout.png";
+const OrderPage = () => {
   return (
-    <div className="placeOrderContainer">
+    <div className="orderPageContainer">
+      {/* <h1>Order : 1</h1> */}
       <div className="leftPlaceOrderDetails">
-        <div className="placeOrderDetails">
+        <h1 className="orderNo">Order : 1</h1>
+        <div className="orderDetails">
           <h2>Shipping</h2>
-          <p>
-            <b>Shipping:</b> Las Veags Navada,USA,100001
+          <p className="shippingDetailsInfo">
+            <b>Name: </b> Fitness Freak Computer Geek
           </p>
+          <p className="shippingDetailsInfo">
+            <b>Email: </b>fitness@gmail.com
+          </p>
+          <p className="shippingDetailsInfo">
+            <b>Shipping: </b> Las Veags Navada,USA,100001
+          </p>
+          <button className="warningMessage">Not Delivered</button>
         </div>
         <div className="placeOrderDetails">
           <h2>Payment Method</h2>
-          <p>
-            <b>Method:</b> PayPal
+          <p className="shippingDetailsInfo">
+            <b>Method: </b> PayPal
           </p>
+          <button className="warningMessage">Not Paid</button>
         </div>
         <div className="placeOrderDetails">
-          <h2>Order Items</h2>
+          <h2 style={{ marginBottom: "1rem" }}>Order Items</h2>
           {products.map((product) => (
             <div className="placeOrderProductDetails">
               <img
@@ -27,14 +37,16 @@ const PlaceOrderPage = () => {
                 className="placeOrderProductImg"
               />
               <p>{product.name}</p>
-              <p>1 X ${product.price}</p>
+              <p>
+                1 X ${product.price} = ${product.price}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="placeOrderSummary">
-        <div className="orderSummaryDetails">
+      <div className="orderSummary">
+        <div className="orderSummaryHeading">
           <h2>Order Summary</h2>
         </div>
         <div className="orderSummaryDetails">
@@ -62,15 +74,11 @@ const PlaceOrderPage = () => {
           <p>$3700</p>
         </div>
         <div className="orderSummaryDetails">
-          <Link to="/order">
-            <button type="submit" className="btn-cart">
-              Place Order
-            </button>
-          </Link>
+          <img src={PaypalImg} alt="paypalImg" className="paypalImg" />
         </div>
       </div>
     </div>
   );
 };
 
-export default PlaceOrderPage;
+export default OrderPage;
