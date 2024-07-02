@@ -27,6 +27,10 @@ select {
   --border-color: gold;
   --color-input: rgb(213, 237, 229);
   --color-message-warning: rgb(233, 233, 115);
+  --color-dropdown: #f1f1f1;
+  --color-dropdown-variant: #ddd;
+  --color-dropdown-background: rgb(235, 233, 233);
+  --color-table-background: #f2f2f2;
 }
 
 body {
@@ -86,6 +90,39 @@ body {
   display: flex;
   gap: 0.25rem;
   align-items: center;
+}
+
+.navUser {
+  position: relative;
+  background: var(--color-bg);
+  color: var(--color-white);
+}
+
+.userProfile {
+  position: absolute;
+  background: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  top: 2.5rem;
+  left: 0;
+  width: 10rem;
+  z-index: 10;
+  color: var(--color-btn);
+}
+
+.userDropdownContent {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  gap: 0.25rem;
+}
+
+.dropdownList {
+  padding: 0.25rem;
+  border-bottom: 1px solid var(--color-dropdown-background);
+}
+.dropdownList:hover {
+  background: var(--color-dropdown-variant);
 }
 
 .navCart:hover,
@@ -465,4 +502,36 @@ footer {
 .orderNo {
   padding: 1rem;
   margin-left: 1rem;
+}
+
+/* User Profile Page */
+
+.userProfileContainer {
+  display: grid;
+  grid-template-columns: 30% 60%;
+  gap: 2rem;
+  margin: 1rem 2rem;
+}
+
+.userTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.userTableTh,
+.userTableTd {
+  padding: 0.8rem;
+  text-align: center;
+}
+
+th {
+  border-bottom: 1px solid var(--color-dropdown-variant);
+}
+
+tbody tr:nth-child(odd) {
+  background: var(--color-table-background);
+}
+
+tbody tr:hover {
+  background: var(--color-dropdown-variant);
 }

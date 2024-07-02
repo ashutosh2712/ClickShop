@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import ShopCart from "../assets/trolley-cart.png";
 import Admin from "../assets/setting.png";
 import Avatar from "../assets/office-man.png";
 import { Link } from "react-router-dom";
 const Navbar = () => {
+  const [userDiv, setUserDiv] = useState(false);
+
+  const toggleInfoVisibility = () => {
+    setUserDiv(!userDiv);
+  };
   return (
     <nav className="navContainer">
       <div className="navLeft">
@@ -36,12 +41,21 @@ const Navbar = () => {
           <img src={Admin} alt="cart" className="cartImg" />
           <p>Admin</p>
         </div>
-        <Link to="/login">
-          <div className="navUser">
-            <img src={Avatar} alt="cart" className="cartImg" />
-            <p>Brock</p>
-          </div>
-        </Link>
+
+        <button className="navUser" onClick={toggleInfoVisibility}>
+          <img src={Avatar} alt="cart" className="cartImg" />
+          <p>Brock</p>
+          {userDiv && (
+            <div className="userProfile">
+              <ul className="userDropdownContent">
+                <Link to="/userprofile">
+                  <li className="dropdownList">Profile</li>
+                </Link>
+                <li className="dropdownList">Logout</li>
+              </ul>
+            </div>
+          )}
+        </button>
       </div>
     </nav>
   );

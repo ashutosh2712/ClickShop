@@ -12,6 +12,7 @@ import ShippingPage from "./pages/ShippingPage";
 import PaymentPage from "./pages/PaymentPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/order/OrderPage";
+import UserProfilePage from "./pages/user/UserProfilePage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+
+      {
+        path: "/userprofile",
+        element: <UserProfilePage />,
       },
 
       {
