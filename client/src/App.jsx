@@ -13,6 +13,9 @@ import PaymentPage from "./pages/PaymentPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import OrderPage from "./pages/order/OrderPage";
 import UserProfilePage from "./pages/user/UserProfilePage";
+import UserListPage from "./pages/user/UserListPage";
+import ProductListPage from "./pages/Product/ProductListPage";
+import OrderListPage from "./pages/order/OrderListPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -58,6 +61,18 @@ const router = createBrowserRouter([
       {
         path: "/order",
         element: <OrderPage />,
+      },
+      {
+        path: "/admin/userlist",
+        element: <UserListPage />,
+      },
+      {
+        path: "/admin/productlist",
+        element: <ProductListPage />,
+      },
+      {
+        path: "/admin/orderlist",
+        element: <OrderListPage />,
       },
       {
         path: "products/:id",

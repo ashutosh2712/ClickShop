@@ -5,9 +5,14 @@ import Avatar from "../assets/office-man.png";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const [userDiv, setUserDiv] = useState(false);
+  const [adminDiv, setAdminDiv] = useState(false);
 
   const toggleInfoVisibility = () => {
     setUserDiv(!userDiv);
+  };
+
+  const toggleAdminInfoVisibility = () => {
+    setAdminDiv(!adminDiv);
   };
   return (
     <nav className="navContainer">
@@ -37,10 +42,25 @@ const Navbar = () => {
           </div>
         </Link>
 
-        <div className="navAdmin">
+        <button className="navAdmin" onClick={toggleAdminInfoVisibility}>
           <img src={Admin} alt="cart" className="cartImg" />
           <p>Admin</p>
-        </div>
+          {adminDiv && (
+            <div className="adminProfile">
+              <ul className="adminDropdownContent">
+                <Link to="/admin/userlist">
+                  <li className="dropdownList">Users</li>
+                </Link>
+                <Link to="/admin/productlist">
+                  <li className="dropdownList">Products</li>
+                </Link>
+                <Link to="/admin/orderlist">
+                  <li className="dropdownList">Orders</li>
+                </Link>
+              </ul>
+            </div>
+          )}
+        </button>
 
         <button className="navUser" onClick={toggleInfoVisibility}>
           <img src={Avatar} alt="cart" className="cartImg" />
