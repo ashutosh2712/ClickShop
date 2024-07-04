@@ -16,6 +16,8 @@ import UserProfilePage from "./pages/user/UserProfilePage";
 import UserListPage from "./pages/user/UserListPage";
 import ProductListPage from "./pages/Product/ProductListPage";
 import OrderListPage from "./pages/order/OrderListPage";
+import UserEditPage from "./pages/user/UserEditPage";
+import ProductEditPage from "./pages/Product/ProductEditPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,10 +68,22 @@ const router = createBrowserRouter([
         path: "/admin/userlist",
         element: <UserListPage />,
       },
+
+      {
+        path: "/admin/user/:id/edit",
+        element: <UserEditPage />,
+      },
+
       {
         path: "/admin/productlist",
         element: <ProductListPage />,
       },
+
+      {
+        path: "/admin/product/:id/edit",
+        element: <ProductEditPage />,
+      },
+
       {
         path: "/admin/orderlist",
         element: <OrderListPage />,

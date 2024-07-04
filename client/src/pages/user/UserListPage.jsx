@@ -2,6 +2,7 @@ import React from "react";
 import cross from "../../assets/delete-button.png";
 import edit from "../../assets/edit.png";
 import Delete from "../../assets/delete.png";
+import { Link } from "react-router-dom";
 const UserListPage = () => {
   return (
     <div className="userListPageContainer">
@@ -26,7 +27,9 @@ const UserListPage = () => {
                 <img src={cross} alt="cross" />
               </td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/user/1/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>
@@ -38,7 +41,9 @@ const UserListPage = () => {
                 <img src={cross} alt="cross" />
               </td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/user/1/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>
@@ -50,7 +55,9 @@ const UserListPage = () => {
                 <img src={cross} alt="cross" />
               </td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/user/1/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>

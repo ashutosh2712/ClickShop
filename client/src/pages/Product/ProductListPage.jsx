@@ -2,13 +2,16 @@ import React from "react";
 
 import edit from "../../assets/edit.png";
 import Delete from "../../assets/delete.png";
+import { Link } from "react-router-dom";
 const ProductListPage = () => {
   return (
     <div className="userListPageContainer">
       <div className="userProfileOrder">
         <div className="productListEdit">
           <h2>Products</h2>
-          <button className="btn-cart">+ Create Product</button>
+          <Link to={`/admin/product/:id/edit`}>
+            <button className="btn-cart">+ Create Product</button>
+          </Link>
         </div>
         <table className="userTable">
           <thead>
@@ -29,7 +32,9 @@ const ProductListPage = () => {
               <td className="userTableTd">Electronic</td>
               <td className="userTableTd">samsung</td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/product/:id/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>
@@ -40,7 +45,9 @@ const ProductListPage = () => {
               <td className="userTableTd">Electronic</td>
               <td className="userTableTd">samsung</td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/product/:id/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>
@@ -51,7 +58,9 @@ const ProductListPage = () => {
               <td className="userTableTd">Electronic</td>
               <td className="userTableTd">samsung</td>
               <td className="userTableTd">
-                <img src={edit} alt="cross" />
+                <Link to={`/admin/product/:id/edit`}>
+                  <img src={edit} alt="cross" />
+                </Link>
                 <img src={Delete} alt="cross" />
               </td>
             </tr>

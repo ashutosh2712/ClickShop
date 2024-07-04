@@ -556,3 +556,29 @@ tbody tr:hover {
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
+/* user Edit Page */
+.userEditContainer {
+  gap: 2rem;
+  margin: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.isAdminCheck {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Product Edit page */
+.productEditContainer {
+  gap: 2rem;
+  margin: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
