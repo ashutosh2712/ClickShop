@@ -2,10 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import testRouter from "./routes/test.mjs";
 import productRouter from "./routes/products/products.mjs";
+import userRouter from "./routes/auth/users.mjs";
 const app = express();
 app.use(express.json());
 app.use("/api", testRouter);
 app.use("/api", productRouter);
+app.use("/api", userRouter);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
