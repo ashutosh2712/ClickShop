@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import authenticatedUser from "../../middlewares/authenticatedUser.mjs";
+import adminAuthenticated from "../../middlewares/adminAuthenticated.mjs";
 dotenv.config();
 
 const router = Router();
@@ -91,21 +93,34 @@ router.post("/auth/logout", (request, response) => {
 });
 
 //admin
-router.get("/users", async (request, response) => {
-  try {
-    const users = await Users.find();
-    response.status(200).json(users);
-  } catch (err) {
-    console.log("Error finding users", err);
-    response.status(401);
+router.get(
+  "/users",
+  authenticatedUser,
+  adminAuthenticated,
+  async (request, response) => {
+    try {
+      const users = await Users.find();
+      response.status(200).json(users);
+    } catch (err) {
+      console.log("Error finding users", err);
+      response.status(401);
+    }
   }
-});
+);
 
 //authenticated user
-router.get("/user/profile", async (request, response) => {
+router.get("/user/profile", authenticatedUser, async (request, response) => {
+  const authenticatedUser = request.user;
+
   try {
-    const users = await Users.find();
-    response.status(200).json(users);
+    const user = await Users.findById(authenticatedUser._id);
+
+    const userResponse = {
+      _id: user._id,
+      name: user.first_name + " " + user.last_name,
+      email: user.email,
+    };
+    response.status(200).json(userResponse);
   } catch (err) {
     console.log("Error finding users", err);
     response.status(401);
@@ -113,33 +128,38 @@ router.get("/user/profile", async (request, response) => {
 });
 
 //Admin user
-router.get("/user/:id", async (request, response) => {
-  const { id } = request.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return response.status(400).json({ error: "Invalid Id!" });
-  }
-
-  try {
-    const user = await Users.findById(id);
-    if (!user) {
-      response.status(404).json({ error: "User Not found" });
+router.get(
+  "/user/:id",
+  authenticatedUser,
+  adminAuthenticated,
+  async (request, response) => {
+    const { id } = request.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return response.status(400).json({ error: "Invalid Id!" });
     }
-    response.status(200).json(user);
-  } catch (err) {
-    console.log("Error finding the user by its id", err);
-    response.status(401);
+
+    try {
+      const user = await Users.findById(id);
+      if (!user) {
+        response.status(404).json({ error: "User Not found" });
+      }
+      response.status(200).json(user);
+    } catch (err) {
+      console.log("Error finding the user by its id", err);
+      response.status(401);
+    }
   }
-});
+);
 
 // Authenticated Uaser
-router.put("/update/profile/", async (request, response) => {
-  const { userId } = request.user;
+router.put("/update/profile/", authenticatedUser, async (request, response) => {
+  const authenticatedUser = request.user;
   const { name, email, password, confirmPassword } = request.body;
 
   const [first_name, last_name] = name.split(" ");
 
   try {
-    const user = await Users.findById(userId);
+    const user = await Users.findById(authenticatedUser._id);
 
     if (!user) {
       response.status(404).json({ error: "User Not found" });
@@ -166,50 +186,60 @@ router.put("/update/profile/", async (request, response) => {
 });
 
 // Admin user
-router.put("/update/user/:id", async (request, response) => {
-  const { id } = request.params;
-  const { name, email, isAdmin } = request.body;
+router.put(
+  "/update/user/:id",
+  authenticatedUser,
+  adminAuthenticated,
+  async (request, response) => {
+    const { id } = request.params;
+    const { name, email, isAdmin } = request.body;
 
-  const [first_name, last_name] = name.split(" ");
+    const [first_name, last_name] = name.split(" ");
 
-  try {
-    const user = await Users.findById(id);
+    try {
+      const user = await Users.findById(id);
 
-    if (!user) {
-      response.status(404).json({ error: "User Not found" });
+      if (!user) {
+        response.status(404).json({ error: "User Not found" });
+      }
+
+      user.first_name = first_name;
+      user.last_name = last_name;
+      user.email = email;
+      user.isAdmin = isAdmin;
+
+      const savedUser = await user.save();
+      response.status(201).json(savedUser);
+    } catch (error) {
+      console.log("Error while updating User:", error);
+      response.status(500);
     }
-
-    user.first_name = first_name;
-    user.last_name = last_name;
-    user.email = email;
-    user.isAdmin = isAdmin;
-
-    const savedUser = await user.save();
-    response.status(201).json(savedUser);
-  } catch (error) {
-    console.log("Error while updating User:", error);
-    response.status(500);
   }
-});
+);
 
 //Admin user
-router.delete("/delete/user/:id", async (request, response) => {
-  const { id } = request.params;
+router.delete(
+  "/delete/user/:id",
+  authenticatedUser,
+  adminAuthenticated,
+  async (request, response) => {
+    const { id } = request.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return response.status(400).json({ error: "Invalid Id!" });
-  }
-  try {
-    const deletedUser = await Users.findByIdAndDelete(id);
-
-    if (!deletedUser) {
-      response.status(404).json({ error: "User Not found" });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return response.status(400).json({ error: "Invalid Id!" });
     }
+    try {
+      const deletedUser = await Users.findByIdAndDelete(id);
 
-    response.status(200).json({ message: "User Deleted!" });
-  } catch (error) {
-    console.log("Error while Deleting users:", error);
-    response.status(500);
+      if (!deletedUser) {
+        response.status(404).json({ error: "User Not found" });
+      }
+
+      response.status(200).json({ message: "User Deleted!" });
+    } catch (error) {
+      console.log("Error while Deleting users:", error);
+      response.status(500);
+    }
   }
-});
+);
 export default router;
