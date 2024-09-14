@@ -2,7 +2,20 @@ import { Router } from "express";
 import { Products } from "../../schemas/Products.mjs";
 import mongoose from "mongoose";
 import adminAuthenticated from "../../middlewares/adminAuthenticated.mjs";
+import authenticatedUser from "../../middlewares/authenticatedUser.mjs";
+import multer from "multer";
 const router = Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "src/uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 router.get("/products", async (request, response) => {
   try {
@@ -47,12 +60,17 @@ router.get("/products/:id", async (request, response) => {
 //authentication required
 router.post(
   "/create/product",
+  authenticatedUser,
   adminAuthenticated,
+  upload.single("image"),
   async (request, response) => {
-    const { image, brand, category, description, rating, price, countInStock } =
+    const { name, brand, category, description, rating, price, countInStock } =
       request.body;
 
+    const image = request.file.filename;
+
     const newProduct = new Products({
+      name,
       image,
       brand,
       category,
@@ -76,8 +94,16 @@ router.put(
   "/update/product/:id",
   adminAuthenticated,
   async (request, response) => {
-    const { image, brand, category, description, rating, price, countInStock } =
-      request.body;
+    const {
+      name,
+      image,
+      brand,
+      category,
+      description,
+      rating,
+      price,
+      countInStock,
+    } = request.body;
     const { id } = request.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -90,7 +116,7 @@ router.put(
       if (!product) {
         response.status(404).json({ error: "Product Not found" });
       }
-
+      product.name = name;
       product.image = image;
       product.brand = brand;
       product.category = category;
