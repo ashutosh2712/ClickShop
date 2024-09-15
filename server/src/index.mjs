@@ -4,8 +4,15 @@ import testRouter from "./routes/test.mjs";
 import productRouter from "./routes/products/products.mjs";
 import userRouter from "./routes/auth/users.mjs";
 import orderRouter from "./routes/orders/orders.mjs";
+import cors from "cors";
 const app = express();
 app.use(express.json());
+app.use(express.static("src"));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use("/api", testRouter);
 app.use("/api", productRouter);
 app.use("/api", userRouter);
