@@ -8,6 +8,7 @@ const productSchema = new Schema({
   category: String,
   description: String,
   rating: Number,
+  numReviews: Number,
   price: Number,
   countInStock: Number,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },

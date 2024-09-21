@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import adminAuthenticated from "../../middlewares/adminAuthenticated.mjs";
 import authenticatedUser from "../../middlewares/authenticatedUser.mjs";
 import multer from "multer";
+import { Reviews } from "../../schemas/Reviews.mjs";
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -154,6 +155,72 @@ router.delete(
     } catch (error) {
       console.log("Error while Deleting products:", error);
       response.status(500);
+    }
+  }
+);
+
+//authentication required
+router.post(
+  "/products/:id/review",
+  authenticatedUser,
+  async (request, response) => {
+    const user = request.user;
+    const { id } = request.params;
+    const { rating, comment } = request.body;
+
+    try {
+      const product = await Products.findById(id);
+
+      if (!product) {
+        return response.status(404).json({ error: "Product not found" });
+      }
+
+      //Check if product already reviewed by user
+      const alreadyReviewed = await Reviews.findOne({
+        userId: user._id,
+        productId: id,
+      });
+
+      if (alreadyReviewed) {
+        return response
+          .status(400)
+          .json({ error: "Product already reviewed by you!" });
+      }
+
+      //check if rating is not provided
+      if (parseFloat(rating) === 0) {
+        return response.status(400).json({ error: "Rating can't be zero" });
+      }
+      //create review
+      const review = new Reviews({
+        userId: user._id,
+        productId: id,
+        name: user.username,
+        rating,
+        comment,
+      });
+
+      await review.save();
+
+      //update numer of reviews for product
+      const reviews = await Reviews.find({ productId: id });
+
+      const toatalRating = reviews.reduce(
+        (acc, item) => acc + parseFloat(item.rating),
+        0
+      );
+
+      const avgRating = toatalRating / reviews.length;
+
+      product.rating = avgRating;
+      product.numReviews = reviews.length;
+
+      await product.save();
+
+      response.status(201).json({ message: "Product reviewed!", review });
+    } catch (error) {
+      console.log("Error while creating reviews:", error);
+      response.status(500).json({ error: "Internal server error" });
     }
   }
 );
