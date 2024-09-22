@@ -582,3 +582,17 @@ tbody tr:hover {
   justify-content: center;
   flex-direction: column;
 }
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+  width: 60vh;
+  height: 2rem;
+  justify-content: center;
+}
+
+.errorMessage {
+  background: rgb(247, 178, 178);
+  color: red;
+  font-weight: bold;
+}

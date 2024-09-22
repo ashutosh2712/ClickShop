@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/Rating";
-
+import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { listProducts } from "../actions/productAction";
 const HomePage = () => {
@@ -19,7 +19,7 @@ const HomePage = () => {
     <div className="homeContainer">
       <h1>Latest Products</h1>
       {loading ? (
-        <h2>Loading..</h2>
+        <Loading />
       ) : error ? (
         <p>Something went wrong!</p>
       ) : (
