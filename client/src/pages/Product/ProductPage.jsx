@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../../components/Rating";
 import reviews from "../../data/reviews";
@@ -14,10 +14,16 @@ const ProductPage = () => {
   const productDetails = useSelector((state) => state.productDetails);
 
   const { loading, error, product } = productDetails;
+
+  const [qty, setQty] = useState(1);
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(listProductDetails(productId));
   }, [dispatch]);
 
+  const addToCartHandler = () => {
+    navigate(`/cart/${productId}?qty=${qty}`);
+  };
   return (
     <div className="productPageContainer">
       <Link to="/" className="returnLink">
@@ -81,17 +87,36 @@ const ProductPage = () => {
                 </p>
               )}
             </p>
-            <div className="productQty aboutProductQty">
-              <button className="decreaseQty">-</button>
-              <span>{product.countInStock}</span>
-              <button className="increaseQty">+</button>
-            </div>
+            {product.countInStock > 0 && (
+              <div className="productQty aboutProductQty">
+                <button
+                  className="decreaseQty"
+                  onClick={() => setQty((prev) => (prev > 1 ? prev - 1 : 1))}
+                >
+                  -
+                </button>
+                <span>{qty}</span>
+                <button
+                  className="increaseQty"
+                  onClick={() =>
+                    setQty((prev) =>
+                      prev < product.countInStock
+                        ? prev + 1
+                        : product.countInStock
+                    )
+                  }
+                >
+                  +
+                </button>
+              </div>
+            )}
             <div className="aboutProductQty">
               <button
                 type="submit"
                 className={
                   product.countInStock > 0 ? "btn-cart" : "btn-cart disabled"
                 }
+                onClick={() => addToCartHandler()}
               >
                 ADD TO CART
               </button>
@@ -100,7 +125,7 @@ const ProductPage = () => {
           <div className="productReviews">
             <h2>Reviews</h2>
             {reviews.map((review) => (
-              <div className="productReviewContent">
+              <div className="productReviewContent" key={review._id}>
                 <h4 className="reviewCell">{review.user}</h4>
                 <Rating value={review.rating} className="reviewCell" />
                 <p className="reviewCell">{review.date}</p>
