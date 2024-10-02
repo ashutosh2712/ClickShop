@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import delteIcon from "../assets/delete.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../actions/cartAction";
+import { addToCart, removeFromCart } from "../actions/cartAction";
 import Message from "../components/Message";
 const CartPage = () => {
   const { id } = useParams();
@@ -19,6 +19,10 @@ const CartPage = () => {
       dispatch(addToCart(productId, qty));
     }
   }, [dispatch, productId, qty]);
+
+  const removeItemFromCart = (id) => {
+    dispatch(removeFromCart(id));
+  };
 
   const decreaseQty = (product, qty) => {
     if (qty > 1) {
@@ -36,7 +40,12 @@ const CartPage = () => {
       <h1>Shopping Cart</h1>
       <div className="cartDetails">
         {cartItems.length === 0 ? (
-          <Message className="warningMessage">{"*Your Cart is empty"}</Message>
+          <Message className="warningMessage">
+            <p>{"*Your Cart is empty"}</p>
+            <Link to="/" className="returnLink goBackCart">
+              <button className="btn-cart">GO BACK</button>
+            </Link>
+          </Message>
         ) : (
           <div className="cartProductsContent">
             {cartItems.map((item) => (
@@ -69,7 +78,12 @@ const CartPage = () => {
                   </button>
                 </div>
 
-                <img src={delteIcon} alt="delete" />
+                <img
+                  src={delteIcon}
+                  alt="delete"
+                  onClick={() => removeItemFromCart(item.product)}
+                  className="deleteImgbtn"
+                />
               </div>
             ))}
           </div>
@@ -84,13 +98,15 @@ const CartPage = () => {
               ${cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)}
             </p>
           </div>
-          <div className="cartCheckout">
-            <Link to="/shipping">
-              <button type="submit" className="btn-cart">
-                Checkout
-              </button>
-            </Link>
-          </div>
+          {cartItems.length > 0 && (
+            <div className="cartCheckout">
+              <Link to="/shipping">
+                <button type="submit" className="btn-cart">
+                  Checkout
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
