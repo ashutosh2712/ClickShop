@@ -2,17 +2,27 @@ import React, { useState } from "react";
 import ShopCart from "../assets/trolley-cart.png";
 import Admin from "../assets/setting.png";
 import Avatar from "../assets/office-man.png";
+import LoginImg from "../assets/login.png";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../actions/userAction";
 const Navbar = () => {
   const [userDiv, setUserDiv] = useState(false);
   const [adminDiv, setAdminDiv] = useState(false);
 
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const toggleInfoVisibility = () => {
     setUserDiv(!userDiv);
   };
 
   const toggleAdminInfoVisibility = () => {
     setAdminDiv(!adminDiv);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
   return (
     <nav className="navContainer">
@@ -62,20 +72,31 @@ const Navbar = () => {
           )}
         </button>
 
-        <button className="navUser" onClick={toggleInfoVisibility}>
-          <img src={Avatar} alt="cart" className="cartImg" />
-          <p>Brock</p>
-          {userDiv && (
-            <div className="userProfile">
-              <ul className="userDropdownContent">
-                <Link to="/userprofile">
-                  <li className="dropdownList">Profile</li>
-                </Link>
-                <li className="dropdownList">Logout</li>
-              </ul>
-            </div>
-          )}
-        </button>
+        {userInfo ? (
+          <button className="navUser" onClick={toggleInfoVisibility}>
+            <img src={Avatar} alt="cart" className="cartImg" />
+            <p>{userInfo.username}</p>
+            {userDiv && (
+              <div className="userProfile">
+                <ul className="userDropdownContent">
+                  <Link to="/userprofile">
+                    <li className="dropdownList">Profile</li>
+                  </Link>
+                  <li className="dropdownList" onClick={handleLogout}>
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
+          </button>
+        ) : (
+          <Link to="/login">
+            <button className="navUser" onClick={toggleInfoVisibility}>
+              <img src={LoginImg} alt="cart" className="cartImg" />
+              <p>Login</p>
+            </button>
+          </Link>
+        )}
       </div>
     </nav>
   );

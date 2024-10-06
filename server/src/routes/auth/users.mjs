@@ -48,7 +48,9 @@ router.post("/auth/register", async (request, response) => {
     );
 
     console.log("User Token:", token);
-    response.status(201).json({ email: savedUser.email, token });
+    response
+      .status(201)
+      .json({ username: savedUser.username, email: savedUser.email, token });
   } catch (error) {
     console.log("Error while creating registering users:", error);
     response.status(500);
@@ -81,7 +83,7 @@ router.post("/auth/login", async (request, response) => {
 
     console.log("token:", token);
 
-    response.json({ email: user.email, token });
+    response.json({ username: user.username, email: user.email, token });
   } catch (err) {
     console.log("Error while login users:", err);
     response.status(500);
