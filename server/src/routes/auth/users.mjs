@@ -119,13 +119,14 @@ router.get("/user/profile", authenticatedUser, async (request, response) => {
 
     const userResponse = {
       _id: user._id,
+      username: user.username,
       name: user.first_name + " " + user.last_name,
       email: user.email,
     };
     response.status(200).json(userResponse);
   } catch (err) {
-    console.log("Error finding users", err);
-    response.status(401);
+    console.log("Error finding user!", err);
+    response.status(401).json({ error: "User Does not exist!" });
   }
 });
 
