@@ -586,6 +586,12 @@ tbody tr:hover {
   color: var(--color-danger-red);
   font-weight: bold;
 }
+
+.successMessage {
+  background: rgb(206, 233, 195);
+  color: var(--color-success);
+  font-weight: bold;
+}
 .warningMessage {
   padding: 1rem;
   margin-left: 1rem;

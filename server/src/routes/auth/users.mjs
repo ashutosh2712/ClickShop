@@ -126,7 +126,7 @@ router.get("/user/profile", authenticatedUser, async (request, response) => {
     response.status(200).json(userResponse);
   } catch (err) {
     console.log("Error finding user!", err);
-    response.status(401).json({ error: "User Does not exist!" });
+    response.status(401).json({ error: "User Does not found" });
   }
 });
 
@@ -157,10 +157,8 @@ router.get(
 // Authenticated Uaser
 router.put("/update/profile/", authenticatedUser, async (request, response) => {
   const authenticatedUser = request.user;
-  const { name, email, password, confirmPassword } = request.body;
-
-  const [first_name, last_name] = name.split(" ");
-
+  const { username, name, email, password, confirmPassword } = request.body;
+  console.log("payload:", request.body);
   try {
     const user = await Users.findById(authenticatedUser._id);
 
@@ -168,9 +166,17 @@ router.put("/update/profile/", authenticatedUser, async (request, response) => {
       response.status(404).json({ error: "User Not found" });
     }
 
-    user.first_name = first_name;
-    user.last_name = last_name;
-    user.email = email;
+    if (username && typeof username === "string") {
+      user.username = username || user.username;
+    }
+    if (name && typeof name === "string") {
+      const [first_name, last_name] = name.split(" ");
+      user.first_name = first_name || user.first_name;
+      user.last_name = last_name || user.last_name;
+    }
+    if (email && email.trim() !== "") {
+      user.email = email;
+    }
     if (password && confirmPassword) {
       if (password != confirmPassword) {
         return response.status(400).send({ message: "Passwords do not match" });
@@ -181,6 +187,7 @@ router.put("/update/profile/", authenticatedUser, async (request, response) => {
     }
 
     const savedUser = await user.save();
+
     response.status(201).json(savedUser);
   } catch (error) {
     console.log("Error while updating User:", error);
