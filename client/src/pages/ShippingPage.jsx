@@ -1,18 +1,37 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { saveShippingAddress } from "../actions/cartAction";
 const ShippingPage = () => {
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const [address, setAddress] = useState(shippingAddress.address);
+  const [city, setCity] = useState(shippingAddress.city);
+  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
+  const [country, setCountry] = useState(shippingAddress.country);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    navigate("/payment");
+  };
   return (
     <div className="authContainer">
       <h2>Shipping</h2>
-      <form className="authFormContainer">
+      <form className="authFormContainer" onSubmit={handleSubmit}>
         <label htmlFor="address">
           <b>Address</b>
         </label>
         <input
           type="text"
           placeholder="Your Address"
+          value={address ? address : ""}
           className="formInput shippingInput"
+          onChange={(e) => setAddress(e.target.value)}
         />
 
         <label htmlFor="city">
@@ -21,7 +40,9 @@ const ShippingPage = () => {
         <input
           type="text"
           placeholder="Your City"
+          value={city ? city : ""}
           className="formInput shippingInput"
+          onChange={(e) => setCity(e.target.value)}
         />
 
         <label htmlFor="postalcode">
@@ -30,7 +51,9 @@ const ShippingPage = () => {
         <input
           type="text"
           placeholder="Your Postal Code"
+          value={postalCode ? postalCode : ""}
           className="formInput shippingInput"
+          onChange={(e) => setPostalCode(e.target.value)}
         />
 
         <label htmlFor="country">
@@ -39,20 +62,15 @@ const ShippingPage = () => {
         <input
           type="text"
           placeholder="Your Country"
+          value={country ? country : ""}
           className="formInput shippingInput"
+          onChange={(e) => setCountry(e.target.value)}
         />
-        <Link to="/payment">
-          <button type="submit" className="btn-cart">
-            Continue
-          </button>
-        </Link>
+
+        <button type="submit" className="btn-cart">
+          Continue
+        </button>
       </form>
-      <p>
-        Already have an account ?{" "}
-        <Link to="/login" className="ToogleLink">
-          Login
-        </Link>
-      </p>
     </div>
   );
 };
