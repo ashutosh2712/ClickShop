@@ -37,8 +37,13 @@ const userInfo = localStorage.getItem("userInfo")
 const shippingAddress = localStorage.getItem("shippingAddress")
   ? JSON.parse(localStorage.getItem("shippingAddress"))
   : {};
+
+const paymentMethod = localStorage.getItem("paymentMethod")
+  ? JSON.parse(localStorage.getItem("paymentMethod"))
+  : {};
+
 const initialState = {
-  cart: { cartItems, shippingAddress },
+  cart: { cartItems, shippingAddress, paymentMethod },
   userLogin: { userInfo },
 };
 const middleware = [thunk];

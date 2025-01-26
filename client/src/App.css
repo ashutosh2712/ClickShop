@@ -425,6 +425,12 @@ footer {
 .selectPayment {
   display: flex;
   gap: 0.25rem;
+  flex-direction: column;
+}
+
+.paymentOption {
+  display: flex;
+  gap: 0.25rem;
 }
 
 /*PlaceOrder Page */
@@ -605,4 +611,20 @@ tbody tr:hover {
 }
 .deleteImgbtn:hover {
   cursor: pointer;
+}
+
+/* Checkout Page */
+.checkoutContainer {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-bottom: 2rem;
+  font-size: 18px;
+}
+
+.checkOutStepDisabled {
+  color: var(--color-bg);
+  width: 10rem;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
