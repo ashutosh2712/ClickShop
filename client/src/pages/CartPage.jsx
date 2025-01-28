@@ -49,7 +49,7 @@ const CartPage = () => {
         ) : (
           <div className="cartProductsContent">
             {cartItems.map((item) => (
-              <div className="prductCartDetails" key={item.product}>
+              <div className="prductCartDetails" key={item.productId}>
                 <img
                   src={`http://localhost:3000/uploads/` + item.image}
                   alt={item.name}
@@ -63,7 +63,7 @@ const CartPage = () => {
                 <div className="productQty">
                   <button
                     className="decreaseQty cartUpdateQty"
-                    onClick={() => decreaseQty(item.product, item.qty)}
+                    onClick={() => decreaseQty(item.productId, item.qty)}
                   >
                     -
                   </button>
@@ -71,7 +71,7 @@ const CartPage = () => {
                   <button
                     className="increaseQty cartUpdateQty"
                     onClick={() =>
-                      increaseQty(item.product, item.qty, item.countInstock)
+                      increaseQty(item.productId, item.qty, item.countInstock)
                     }
                   >
                     +
@@ -81,7 +81,7 @@ const CartPage = () => {
                 <img
                   src={delteIcon}
                   alt="delete"
-                  onClick={() => removeItemFromCart(item.product)}
+                  onClick={() => removeItemFromCart(item.productId)}
                   className="deleteImgbtn"
                 />
               </div>

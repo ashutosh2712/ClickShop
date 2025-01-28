@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Message from "../components/Message";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CheckoutSteps from "../components/CheckoutSteps";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
+import { createOrder } from "../actions/orderAction";
+
 const PlaceOrderPage = () => {
   const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
 
   cart.itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -18,8 +28,28 @@ const PlaceOrderPage = () => {
     Number(cart.taxPrice)
   ).toFixed(2);
 
+  if (!cart.paymentMethod) {
+    navigate("/payment");
+  }
+
+  useEffect(() => {
+    if (success) {
+      navigate(`/order/${order._id}`);
+    }
+    dispatch({ type: ORDER_CREATE_RESET });
+  }, [success]);
   const placeOrderHandler = () => {
-    console.log("object");
+    console.log("orderHandler");
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
   };
   return (
     <div style={{ marginTop: "2rem" }}>
@@ -54,7 +84,7 @@ const PlaceOrderPage = () => {
                 {" "}
                 {cart.cartItems.map((product) => (
                   <Link
-                    to={`/products/${product.product}`}
+                    to={`/products/${product.productId}`}
                     className="placeOrderProductDetails"
                     key={product.product}
                   >
