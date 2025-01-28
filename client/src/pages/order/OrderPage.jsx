@@ -1,47 +1,96 @@
-import React from "react";
+import React, { useEffect } from "react";
 import products from "../../data/products";
 import PaypalImg from "../../assets/StandardCheckout.png";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { use } from "react";
+import { getOrderDetails } from "../../actions/orderAction";
+import Message from "../../components/Message";
+import Loading from "../../components/Loading";
 const OrderPage = () => {
-  return (
+  const { id: orderId } = useParams();
+  // const orderId = id;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const orderDetails = useSelector((state) => state.orderDetails);
+  const { loading, error, order, success } = orderDetails;
+
+  if (!loading && !error) {
+    order.itemsPrice = order.orderItems.reduce(
+      (acc, item) => acc + item.price * item.qty,
+      0
+    );
+  }
+
+  useEffect(() => {
+    if (!order || order._id !== orderId) {
+      dispatch(getOrderDetails(orderId));
+    }
+  }, [dispatch, order, orderId, success]);
+  return loading ? (
+    <Loading />
+  ) : error ? (
+    <Message className="errorMessage">{`Your Error: ${error}`}</Message>
+  ) : (
     <div className="orderPageContainer">
       {/* <h1>Order : 1</h1> */}
       <div className="leftPlaceOrderDetails">
-        <h1 className="orderNo">Order : 1</h1>
+        <h1 className="orderNo">Order no {order._id}</h1>
         <div className="orderDetails">
           <h2>Shipping</h2>
           <p className="shippingDetailsInfo">
-            <b>Name: </b> Fitness Freak Computer Geek
+            <b>Name: </b> {order.userId.username}
           </p>
           <p className="shippingDetailsInfo">
-            <b>Email: </b>fitness@gmail.com
+            <b>Email: </b>
+            {order.userId.email}
           </p>
           <p className="shippingDetailsInfo">
-            <b>Shipping: </b> Las Veags Navada,USA,100001
+            <b>Shipping: </b>
+            {order.shippingAddressId.address}, {order.shippingAddressId.city},{" "}
+            {order.shippingAddressId.country},{" "}
+            {order.shippingAddressId.postalCode}
           </p>
           <button className="warningMessage">Not Delivered</button>
         </div>
         <div className="placeOrderDetails">
           <h2>Payment Method</h2>
           <p className="shippingDetailsInfo">
-            <b>Method: </b> PayPal
+            <b>Method: </b> {order.paymentMethod}
           </p>
           <button className="warningMessage">Not Paid</button>
         </div>
         <div className="placeOrderDetails">
           <h2 style={{ marginBottom: "1rem" }}>Order Items</h2>
-          {products.map((product) => (
-            <div className="placeOrderProductDetails">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="placeOrderProductImg"
-              />
-              <p>{product.name}</p>
-              <p>
-                1 X ${product.price} = ${product.price}
-              </p>
-            </div>
-          ))}
+          {order.orderItems.length === 0 ? (
+            <Message className="warningMessage">
+              <p>{"*Your Cart is empty"}</p>
+              <Link to="/" className="returnLink goBackCart">
+                <button className="btn-cart">GO BACK</button>
+              </Link>
+            </Message>
+          ) : (
+            <>
+              {" "}
+              {order.orderItems.map((product) => (
+                <Link
+                  to={`/products/${product.productId}`}
+                  className="placeOrderProductDetails"
+                  key={product.product}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/` + product.image}
+                    alt={product.name}
+                    className="placeOrderProductImg"
+                  />
+                  <p>{product.name}</p>
+                  <p>
+                    {product.qty} X ${product.price}
+                  </p>
+                </Link>
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -53,25 +102,25 @@ const OrderPage = () => {
           <p>
             <b>Items:</b>
           </p>
-          <p>$1200</p>
+          <p>${order.itemsPrice}</p>
         </div>
         <div className="orderSummaryDetails">
           <p>
             <b>Shipping:</b>
           </p>
-          <p>$120</p>
+          <p>${order.shippingPrice}</p>
         </div>
         <div className="orderSummaryDetails">
           <p>
             <b>Taxes:</b>
           </p>
-          <p>$20</p>
+          <p>${order.taxPrice}</p>
         </div>
         <div className="orderSummaryDetails">
           <p>
             <b>Total:</b>
           </p>
-          <p>$3700</p>
+          <p>${order.totalPrice}</p>
         </div>
         <div className="orderSummaryDetails">
           <img src={PaypalImg} alt="paypalImg" className="paypalImg" />

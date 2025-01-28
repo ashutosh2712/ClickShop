@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <PlaceOrderPage />,
       },
       {
-        path: "/order",
+        path: "/order/:id?",
         element: <OrderPage />,
       },
       {

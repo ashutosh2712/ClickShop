@@ -111,14 +111,22 @@ router.get(
   async (request, response) => {
     const userId = request.user._id;
     const { id } = request.params;
+
     try {
       //Normal User
       var orders = null;
       if (request.user.isAdmin) {
         //admin user
-        orders = await Orders.findById(id);
+        orders = await Orders.findById(id)
+          .populate("userId", "username email")
+          .populate("shippingAddressId");
       } else {
-        orders = await Orders.findById(id).find({ userId });
+        orders = await Orders.findByOne({ _id: id, userId })
+          .populate("userId", "username email")
+          .populate("shippingAddressId");
+      }
+      if (!orders) {
+        return response.status(404).json({ message: "Order not found" });
       }
 
       response.status(200).json(orders);
