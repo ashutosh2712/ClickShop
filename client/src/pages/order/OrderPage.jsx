@@ -58,7 +58,13 @@ const OrderPage = () => {
           <p className="shippingDetailsInfo">
             <b>Method: </b> {order.paymentMethod}
           </p>
-          <button className="warningMessage">Not Paid</button>
+          {order.isPaid ? (
+            <button className="successMessage">
+              Paid at : {order.paidAt.substring(0, 10)}
+            </button>
+          ) : (
+            <button className="warningMessage">Not Paid</button>
+          )}
         </div>
         <div className="placeOrderDetails">
           <h2 style={{ marginBottom: "1rem" }}>Order Items</h2>

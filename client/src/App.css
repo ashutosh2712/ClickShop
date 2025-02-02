@@ -594,6 +594,8 @@ tbody tr:hover {
 }
 
 .successMessage {
+  padding: 1rem;
+  margin-left: 1rem;
   background: rgb(206, 233, 195);
   color: var(--color-success);
   font-weight: bold;
