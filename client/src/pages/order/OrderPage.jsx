@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
-import products from "../../data/products";
+import React, { useEffect, useState } from "react";
+
 import PaypalImg from "../../assets/StandardCheckout.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { use } from "react";
-import { getOrderDetails } from "../../actions/orderAction";
+
+import { getOrderDetails, payOrder } from "../../actions/orderAction";
 import Message from "../../components/Message";
 import Loading from "../../components/Loading";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 const OrderPage = () => {
   const { id: orderId } = useParams();
   // const orderId = id;
@@ -14,6 +15,10 @@ const OrderPage = () => {
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails);
   const { loading, error, order, success } = orderDetails;
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
+  const [sdkReady, setSdkReady] = useState(false);
 
   if (!loading && !error) {
     order.itemsPrice = order.orderItems.reduce(
@@ -22,11 +27,38 @@ const OrderPage = () => {
     );
   }
 
-  useEffect(() => {
-    if (!order || order._id !== orderId) {
-      dispatch(getOrderDetails(orderId));
+  const onCreateOrder = (data, actions) => {
+    if (!order) {
+      console.log("Order details not available");
+      return;
     }
-  }, [dispatch, order, orderId, success]);
+    const setOrderCurVal = {
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: order.totalPrice,
+          },
+        },
+      ],
+    };
+
+    return actions.order.create(setOrderCurVal);
+  };
+
+  const onApprove = (data, actions) => {
+    console.log("data :", data);
+    dispatch(payOrder(orderId, data));
+  };
+
+  useEffect(() => {
+    if (!order || successPay || order._id !== orderId) {
+      dispatch({ type: "ORDER_PAY_RESET" });
+      dispatch(getOrderDetails(orderId));
+    } else if (!order.isPaid) {
+      setSdkReady(true);
+    }
+  }, [dispatch, order, orderId, sdkReady, successPay, success]);
   return loading ? (
     <Loading />
   ) : error ? (
@@ -128,9 +160,21 @@ const OrderPage = () => {
           </p>
           <p>${order.totalPrice}</p>
         </div>
-        <div className="orderSummaryDetails">
-          <img src={PaypalImg} alt="paypalImg" className="paypalImg" />
-        </div>
+        {!order.isPaid && (
+          <div className="orderSummaryDetails">
+            {loadingPay && <Loading />}
+            {!sdkReady ? (
+              <Loading />
+            ) : (
+              <PayPalButtons
+                style={{ layout: "vertical" }}
+                createOrder={(data, actions) => onCreateOrder(data, actions)}
+                onApprove={(data, actions) => onApprove(data, actions)}
+                className="paypalImg"
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -89,7 +89,7 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await axios.get(
+    const { data } = await axios.patch(
       `http://localhost:3000/api/order/${id}/pay`,
       paymentResult,
       {
