@@ -6,6 +6,8 @@ import { getUserDetails, updateUserProfile } from "../../actions/userAction";
 import Loading from "../../components/Loading";
 import Message from "../../components/Message";
 import { USER_UPDATE_PROFILE_RESET } from "../../constants/userConstants";
+import { listMyOrders } from "../../actions/orderAction";
+
 const UserProfilePage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +26,10 @@ const UserProfilePage = () => {
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
+
+  const orderListMy = useSelector((state) => state.orderListMy);
+  const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
@@ -31,6 +37,7 @@ const UserProfilePage = () => {
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
+        dispatch(listMyOrders());
       } else {
         setName(userInfo.username);
         setEmail(userInfo.email);
@@ -121,48 +128,49 @@ const UserProfilePage = () => {
 
       <div className="userProfileOrder">
         <h2>My Orders</h2>
-        <table className="userTable">
-          <thead>
-            <tr>
-              <th className="userTableTh">ID</th>
-              <th className="userTableTh">DATE</th>
-              <th className="userTableTh">TOTAL</th>
-              <th className="userTableTh">PAID</th>
-              <th className="userTableTh"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="userTableTd">1</td>
-              <td className="userTableTd">2024-03-31</td>
-              <td className="userTableTd">$302.95</td>
-              <td className="userTableTd">2024-06-08</td>
-              <td className="userTableTd">
-                <button className="btn-cart">Details</button>
-              </td>
-            </tr>
-            <tr>
-              <td className="userTableTd">2</td>
-              <td className="userTableTd">2024-03-31</td>
-              <td className="userTableTd">$33.95</td>
-              <td className="userTableTd">2024-06-08</td>
-              <td className="userTableTd">
-                <button className="btn-cart">Details</button>
-              </td>
-            </tr>
-            <tr>
-              <td className="userTableTd">3</td>
-              <td className="userTableTd">2024-03-31</td>
-              <td className="userTableTd">$32.95</td>
-              <td className="userTableTd">
-                <img src={cross} alt="cross" />
-              </td>
-              <td className="userTableTd">
-                <button className="btn-cart">Details</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        {loadingOrders ? (
+          <Loading />
+        ) : errorOrders ? (
+          <Message className="errorMessage">{errorOrders}</Message>
+        ) : (
+          <table className="userTable">
+            <thead>
+              <tr>
+                <th className="userTableTh">ID</th>
+                <th className="userTableTh">DATE</th>
+                <th className="userTableTh">TOTAL</th>
+                <th className="userTableTh">PAID</th>
+                <th className="userTableTh"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order._id}>
+                  <td className="userTableTd">{order._id}</td>
+                  <td className="userTableTd">
+                    {order.createdAt.substring(0, 10)}
+                  </td>
+                  <td className="userTableTd">{order.totalPrice}</td>
+                  <td className="userTableTd">
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <img src={cross} alt="cross" />
+                    )}
+                  </td>
+                  <td className="userTableTd">
+                    <button
+                      className="btn-cart"
+                      onClick={() => navigate(`/order/${order._id}`)}
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
