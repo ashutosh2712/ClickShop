@@ -83,7 +83,12 @@ router.post("/auth/login", async (request, response) => {
 
     console.log("token:", token);
 
-    response.json({ username: user.username, email: user.email, token });
+    response.json({
+      username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token,
+    });
   } catch (err) {
     console.log("Error while login users:", err);
     response.status(500);

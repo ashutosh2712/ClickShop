@@ -13,6 +13,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  console.log("userInfo in navbar:", userInfo);
   const toggleInfoVisibility = () => {
     setUserDiv(!userDiv);
   };
@@ -52,26 +53,27 @@ const Navbar = () => {
             <p>Cart</p>
           </div>
         </Link>
-
-        <button className="navAdmin" onClick={toggleAdminInfoVisibility}>
-          <img src={Admin} alt="cart" className="cartImg" />
-          <p>Admin</p>
-          {adminDiv && (
-            <div className="adminProfile">
-              <ul className="adminDropdownContent">
-                <Link to="/admin/userlist">
-                  <li className="dropdownList">Users</li>
-                </Link>
-                <Link to="/admin/productlist">
-                  <li className="dropdownList">Products</li>
-                </Link>
-                <Link to="/admin/orderlist">
-                  <li className="dropdownList">Orders</li>
-                </Link>
-              </ul>
-            </div>
-          )}
-        </button>
+        {userInfo && userInfo.isAdmin && (
+          <button className="navAdmin" onClick={toggleAdminInfoVisibility}>
+            <img src={Admin} alt="cart" className="cartImg" />
+            <p>Admin</p>
+            {adminDiv && (
+              <div className="adminProfile">
+                <ul className="adminDropdownContent">
+                  <Link to="/admin/userlist">
+                    <li className="dropdownList">Users</li>
+                  </Link>
+                  <Link to="/admin/productlist">
+                    <li className="dropdownList">Products</li>
+                  </Link>
+                  <Link to="/admin/orderlist">
+                    <li className="dropdownList">Orders</li>
+                  </Link>
+                </ul>
+              </div>
+            )}
+          </button>
+        )}
 
         {userInfo ? (
           <button className="navUser" onClick={toggleInfoVisibility}>
