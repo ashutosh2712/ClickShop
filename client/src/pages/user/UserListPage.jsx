@@ -88,7 +88,7 @@ const UserListPage = () => {
                     )}
                   </td>
                   <td className="userTableTd">
-                    <Link to={`/admin/user/1/edit`}>
+                    <Link to={`/admin/user/${user._id}/edit`}>
                       <img src={edit} alt="cross" />
                     </Link>
 
