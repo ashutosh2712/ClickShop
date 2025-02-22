@@ -56,7 +56,7 @@ const ProductListPage = () => {
       <div className="userProfileOrder">
         <div className="productListEdit">
           <h2>Products</h2>
-          <Link to={`/admin/product/:id/edit`}>
+          <Link to={`/admin/create/product`}>
             <button className="btn-cart">+ Create Product</button>
           </Link>
         </div>

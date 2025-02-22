@@ -67,6 +67,8 @@ router.post(
   async (request, response) => {
     const { name, brand, category, description, rating, price, countInStock } =
       request.body;
+    // console.log("request.body", request.body);
+
     let image = null;
     if (request.file) {
       image = request.file.filename;
