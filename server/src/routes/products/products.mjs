@@ -67,8 +67,12 @@ router.post(
   async (request, response) => {
     const { name, brand, category, description, rating, price, countInStock } =
       request.body;
-
-    const image = request.file.filename;
+    let image = null;
+    if (request.file) {
+      image = request.file.filename;
+    } else {
+      image = "sample.jpg";
+    }
 
     const newProduct = new Products({
       name,
@@ -137,6 +141,7 @@ router.put(
 
 router.delete(
   "/delete/product/:id",
+  authenticatedUser,
   adminAuthenticated,
   async (request, response) => {
     const { id } = request.params;
@@ -162,6 +167,7 @@ router.delete(
 //authentication required
 router.post(
   "/products/:id/review",
+  authenticatedUser,
   authenticatedUser,
   async (request, response) => {
     const user = request.user;

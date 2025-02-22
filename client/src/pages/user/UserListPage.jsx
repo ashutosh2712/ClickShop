@@ -39,7 +39,6 @@ const UserListPage = () => {
   }, [dispatch, successDelete, userInfo]);
 
   const deleteHandler = (id) => {
-    console.log("id to delete", id);
     setShowConfirmation({ isloading: true });
     setUserIdToDelete(id);
   };
