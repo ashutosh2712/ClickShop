@@ -43,7 +43,7 @@ const UserEditPage = () => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    console.log("isAdmin", isAdmin);
+    // console.log("isAdmin", isAdmin);
     dispatch(updateUser({ _id: userId, name, email, isAdmin }));
   };
 

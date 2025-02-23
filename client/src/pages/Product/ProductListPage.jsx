@@ -85,7 +85,7 @@ const ProductListPage = () => {
                   <td className="userTableTd">{product.category}</td>
                   <td className="userTableTd">{product.brand}</td>
                   <td className="userTableTd">
-                    <Link to={`/admin/product/:id/edit`}>
+                    <Link to={`/admin/product/${product._id}/edit`}>
                       <img src={edit} alt="cross" />
                     </Link>
                     <img

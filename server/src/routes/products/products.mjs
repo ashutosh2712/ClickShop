@@ -99,18 +99,20 @@ router.post(
 
 router.put(
   "/update/product/:id",
+  authenticatedUser,
   adminAuthenticated,
+  upload.single("image"),
   async (request, response) => {
-    const {
-      name,
-      image,
-      brand,
-      category,
-      description,
-      rating,
-      price,
-      countInStock,
-    } = request.body;
+    const { name, brand, category, description, rating, price, countInStock } =
+      request.body;
+
+    let image = null;
+    if (request.file) {
+      image = request.file.filename;
+    } else {
+      image = "sample.jpg";
+    }
+
     const { id } = request.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -123,6 +125,7 @@ router.put(
       if (!product) {
         response.status(404).json({ error: "Product Not found" });
       }
+
       product.name = name;
       product.image = image;
       product.brand = brand;
