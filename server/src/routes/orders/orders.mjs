@@ -79,7 +79,7 @@ router.get(
   adminAuthenticated,
   async (request, response) => {
     try {
-      const orders = await Orders.find();
+      const orders = await Orders.find().populate("userId", "username email");
       response.status(200).json(orders);
     } catch (error) {
       console.log("Error while getting orders : ", error);
@@ -121,7 +121,7 @@ router.get(
           .populate("userId", "username email")
           .populate("shippingAddressId");
       } else {
-        orders = await Orders.findByOne({ _id: id, userId })
+        orders = await Orders.findOne({ _id: id, userId })
           .populate("userId", "username email")
           .populate("shippingAddressId");
       }

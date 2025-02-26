@@ -4,19 +4,36 @@ import PaypalImg from "../../assets/StandardCheckout.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getOrderDetails, payOrder } from "../../actions/orderAction";
+import {
+  deliverOrder,
+  getOrderDetails,
+  payOrder,
+} from "../../actions/orderAction";
 import Message from "../../components/Message";
 import Loading from "../../components/Loading";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  ORDER_DELIVER_RESET,
+  ORDER_PAY_RESET,
+} from "../../constants/orderConstants";
+
 const OrderPage = () => {
   const { id: orderId } = useParams();
-  // const orderId = id;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const orderDetails = useSelector((state) => state.orderDetails);
   const { loading, error, order, success } = orderDetails;
+
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const [sdkReady, setSdkReady] = useState(false);
 
@@ -52,13 +69,20 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    if (!order || successPay || order._id !== orderId) {
-      dispatch({ type: "ORDER_PAY_RESET" });
+    if (!order || successPay || order._id !== orderId || successDeliver) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
+
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       setSdkReady(true);
     }
-  }, [dispatch, order, orderId, sdkReady, successPay, success]);
+  }, [dispatch, order, orderId, sdkReady, successPay, success, successDeliver]);
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
+  };
+
   return loading ? (
     <Loading />
   ) : error ? (
@@ -83,7 +107,13 @@ const OrderPage = () => {
             {order.shippingAddressId.country},{" "}
             {order.shippingAddressId.postalCode}
           </p>
-          <button className="warningMessage">Not Delivered</button>
+          {order.isDelivered ? (
+            <button className="successMessage">
+              Delivered at : {order.delideredAt?.substring(0, 10)}
+            </button>
+          ) : (
+            <button className="warningMessage">Not Delivered</button>
+          )}
         </div>
         <div className="placeOrderDetails">
           <h2>Payment Method</h2>
@@ -173,6 +203,14 @@ const OrderPage = () => {
                 className="paypalImg"
               />
             )}
+          </div>
+        )}
+        {loadingDeliver && <Loading />}
+        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+          <div className="orderSummaryDetails">
+            <button className="btn-cart" onClick={deliverHandler}>
+              Mark as Delivered
+            </button>
           </div>
         )}
       </div>
