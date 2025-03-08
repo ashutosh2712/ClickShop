@@ -3,26 +3,69 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../../components/Rating";
 import reviews from "../../data/reviews";
-import { listProductDetails } from "../../actions/productAction";
+import {
+  createProductReview,
+  listProductDetails,
+  listProductReviews,
+} from "../../actions/productAction";
 import Loading from "../../components/Loading";
 import Message from "../../components/Message";
+import { PRODUCT_CREATE_REVIEW_RESET } from "../../constants/productConstant";
+
 const ProductPage = () => {
-  const { id } = useParams();
-  const productId = id;
+  const { id: productId } = useParams();
 
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
 
   const { loading, error, product } = productDetails;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const productReviewCreate = useSelector((state) => state.productReviewCreate);
+  const {
+    success: successProductReview,
+    error: errorProductReview,
+    loading: loadingProductReview,
+  } = productReviewCreate;
+
+  const productReviews = useSelector((state) => state.productReviews);
+  const {
+    loading: loadingReviews,
+    reviews,
+    error: errrorReviews,
+  } = productReviews;
+
   const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
   const navigate = useNavigate();
   useEffect(() => {
+    if (successProductReview) {
+      setRating(0);
+      setComment("");
+      setTimeout(() => {
+        dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+      }, 2000);
+    }
     dispatch(listProductDetails(productId));
-  }, [dispatch]);
+    dispatch(listProductReviews(productId));
+  }, [dispatch, successProductReview]);
 
   const addToCartHandler = () => {
     navigate(`/cart/${productId}?qty=${qty}`);
+  };
+
+  const reviewHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      createProductReview(productId, {
+        rating,
+        comment,
+      })
+    );
   };
   return (
     <div className="productPageContainer">
@@ -124,40 +167,78 @@ const ProductPage = () => {
           </div>
           <div className="productReviews">
             <h2>Reviews</h2>
-            {reviews.map((review) => (
-              <div className="productReviewContent" key={review._id}>
-                <h4 className="reviewCell">{review.user}</h4>
-                <Rating value={review.rating} className="reviewCell" />
-                <p className="reviewCell">{review.date}</p>
-                <p className="reviewCell">{review.comment}</p>
-              </div>
-            ))}
+            {loadingReviews ? (
+              <Loading />
+            ) : errrorReviews ? (
+              <Message className="errorMessage">{errrorReviews}</Message>
+            ) : reviews.length >= 0 ? (
+              reviews.map((review) => (
+                <div className="productReviewContent" key={review._id}>
+                  <h4 className="reviewCell">{review.userId.username}</h4>
+                  <Rating value={review.rating} className="reviewCell" />
+                  <p className="reviewCell">
+                    {review.createdAt.substring(0, 10)}
+                  </p>
+                  <p className="reviewCell">{review.comment}</p>
+                </div>
+              ))
+            ) : (
+              <Message className="warningMessage">No Reviews</Message>
+            )}
 
             <div className="writeReviewContainer">
               <h3>Write your Review</h3>
-              <div className="ratingSelect">
-                <p>Rating: </p>
-                <select name="rating" id="rating">
-                  <option value="rating" selected>
-                    SELECT
-                  </option>
-                  <option value="rating">1 - Poor</option>
-                  <option value="rating">2 - Good</option>
-                  <option value="rating">3 - Very Good</option>
-                  <option value="rating">4 - Recommended</option>
-                  <option value="rating">5 - Awesome</option>
-                </select>
-              </div>
-              <textarea
-                name="comment"
-                id="comment"
-                rows={10}
-                placeholder="Write Your Review"
-                className="reviewText"
-              ></textarea>
-              <button type="submit" className="btn-cart">
-                SUBMIT
-              </button>
+              {loadingProductReview && <Loading />}
+              {errorProductReview && (
+                <Message className="errorMessage">{errorProductReview}</Message>
+              )}
+              {successProductReview && (
+                <Message className="successMessage">
+                  Review Submitted Successfully!
+                </Message>
+              )}
+              {userInfo ? (
+                <form className="authFormContainer" onSubmit={reviewHandler}>
+                  <div className="ratingSelect">
+                    <p>Rating: </p>
+                    <select
+                      name="rating"
+                      id="rating"
+                      value={rating}
+                      onChange={(e) => setRating(Number(e.target.value))}
+                    >
+                      <option value="0" disabled>
+                        SELECT
+                      </option>
+                      <option value="1">1 - Poor</option>
+                      <option value="2">2 - Good</option>
+                      <option value="3">3 - Very Good</option>
+                      <option value="4">4 - Recommended</option>
+                      <option value="5">5 - Awesome</option>
+                    </select>
+                  </div>
+                  <textarea
+                    name="comment"
+                    id="comment"
+                    rows={10}
+                    placeholder="Write Your Review"
+                    value={comment}
+                    className="reviewText"
+                    onChange={(e) => setComment(e.target.value)}
+                  ></textarea>
+                  <button type="submit" className="btn-cart">
+                    SUBMIT
+                  </button>
+                </form>
+              ) : (
+                <Message className="warningMessage">
+                  Please
+                  <Link to={`/login`} className="btn-cart">
+                    Login
+                  </Link>
+                  to write a Review
+                </Message>
+              )}
             </div>
           </div>
         </div>

@@ -173,7 +173,6 @@ router.delete(
 router.post(
   "/products/:id/review",
   authenticatedUser,
-  authenticatedUser,
   async (request, response) => {
     const user = request.user;
     const { id } = request.params;
@@ -235,5 +234,20 @@ router.post(
     }
   }
 );
+
+router.get("/products/:id/reviews", async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const reviews = await Reviews.find({ productId: id })
+      .populate("userId", "username")
+      .sort({ createdAt: -1 });
+
+    response.status(200).json(reviews);
+  } catch (error) {
+    console.log("Error while getting reviews:", error);
+    response.status(500).json({ error: "Internal server error" });
+  }
+});
 
 export default router;

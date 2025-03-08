@@ -2,6 +2,9 @@ import axios from "axios";
 import {
   PRODUCT_CREATE_FAIL,
   PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE_REVIEW_FAIL,
+  PRODUCT_CREATE_REVIEW_REQUEST,
+  PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_SUCCESS,
   PRODUCT_DELETE_FAIL,
   PRODUCT_DELETE_REQUEST,
@@ -12,6 +15,9 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  PRODUCT_REVIEWS_FAIL,
+  PRODUCT_REVIEWS_REQUEST,
+  PRODUCT_REVIEWS_SUCCESS,
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
@@ -142,6 +148,59 @@ export const updateProduct = (product) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message,
+    });
+  }
+};
+
+export const createProductReview =
+  (productId, review) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      await axios.post(
+        `http://localhost:3000/api/products/${productId}/review`,
+        review,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_CREATE_REVIEW_FAIL,
+        payload:
+          error.response && error.response.data.error
+            ? error.response.data.error
+            : error.message,
+      });
+    }
+  };
+
+export const listProductReviews = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_REVIEWS_REQUEST });
+    const { data } = await axios.get(
+      `http://localhost:3000/api/products/${id}/reviews`
+    );
+
+    dispatch({
+      type: PRODUCT_REVIEWS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_REVIEWS_FAIL,
       payload:
         error.response && error.response.data.error
           ? error.response.data.error
