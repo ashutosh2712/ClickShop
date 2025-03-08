@@ -23,18 +23,37 @@ import {
   PRODUCT_REVIEWS_REQUEST,
   PRODUCT_REVIEWS_SUCCESS,
   PRODUCT_REVIEWS_FAIL,
+  SET_SEARCH_TERM,
 } from "../constants/productConstant";
 
-export const productListReducer = (state = { products: [] }, action) => {
+export const productListReducer = (
+  state = { products: [], searchTerm: "", page: 1, pages: 1 },
+  action
+) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
-      return { loading: true, products: [] };
+      return {
+        loading: true,
+        products: [],
+        searchTerm: state.searchTerm,
+        page: state.page,
+        pages: state.pages,
+      };
 
     case PRODUCT_LIST_SUCCESS:
-      return { loading: false, products: action.payload };
+      return {
+        loading: false,
+        products: action.payload.products,
+        searchTerm: state.searchTerm,
+        page: action.payload.page,
+        pages: action.payload.pages,
+      };
 
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
+
+    case SET_SEARCH_TERM:
+      return { ...state, searchTerm: action.payload };
 
     default:
       return state;

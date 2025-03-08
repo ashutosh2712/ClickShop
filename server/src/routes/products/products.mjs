@@ -19,9 +19,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get("/products", async (request, response) => {
+  const { search, page = 1, limit = 3 } = request.query;
+
   try {
-    const products = await Products.find();
-    response.status(200).json(products);
+    let query = {};
+    if (search) {
+      query = { name: { $regex: search, $options: "i" } };
+    }
+    const totalProducts = await Products.countDocuments(query);
+    const products = await Products.find(query)
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit));
+
+    response.status(200).json({
+      products,
+      page,
+      pages: Math.ceil(totalProducts / limit),
+    });
   } catch (err) {
     console.log("Error finding products", err);
     response.status(401);

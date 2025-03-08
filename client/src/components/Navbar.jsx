@@ -6,14 +6,20 @@ import LoginImg from "../assets/login.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userAction";
+import { listProducts, setSearchTerm } from "../actions/productAction";
 const Navbar = () => {
   const [userDiv, setUserDiv] = useState(false);
   const [adminDiv, setAdminDiv] = useState(false);
+
+  const [search, setSearch] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log("userInfo in navbar:", userInfo);
+
+  // console.log("userInfo in navbar:", userInfo);
   const toggleInfoVisibility = () => {
     setUserDiv(!userDiv);
   };
@@ -26,6 +32,12 @@ const Navbar = () => {
     dispatch(logout());
     navigate("/");
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(setSearchTerm(search));
+    // dispatch(listProducts(search));
+  };
   return (
     <nav className="navContainer">
       <div className="navLeft">
@@ -34,16 +46,18 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className="navCenter">
+      <form className="navCenter" onSubmit={handleSearch}>
         <input
           type="text"
           placeholder="Search Your Products"
           className="navSearch"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <button type="submit" className="btn">
           SEARCH
         </button>
-      </div>
+      </form>
 
       <div className="navRight">
         <Link to="/cart">

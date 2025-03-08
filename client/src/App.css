@@ -676,3 +676,30 @@ tbody tr:hover {
   border: none;
   cursor: pointer;
 }
+
+/* pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-btn {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background-color: var(--color-btn);
+  color: var(--color-white);
+}
+
+.page-btn.active {
+  background-color: #ddd;
+  color: var(--color-btn);
+  font-weight: bold;
+}
+
+.page-btn:hover {
+  background-color: var(--color-white);
+  color: var(--color-btn);
+}

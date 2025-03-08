@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../../components/Rating";
-import reviews from "../../data/reviews";
+
 import {
   createProductReview,
   listProductDetails,

@@ -21,23 +21,40 @@ import {
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
+  SET_SEARCH_TERM,
 } from "../constants/productConstant";
 
-export const listProducts = () => async (dispatch) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST });
-    const { data } = await axios.get(`http://localhost:3000/api/products`);
+export const listProducts =
+  (search = "", page = 1) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_LIST_REQUEST });
+      const { data } = await axios.get(
+        `http://localhost:3000/api/products?search=${search}&page=${page}`
+      );
 
-    dispatch({
-      type: PRODUCT_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload: error,
-    });
-  }
+      dispatch({
+        type: PRODUCT_LIST_SUCCESS,
+        payload: data,
+      });
+
+      dispatch({
+        type: SET_SEARCH_TERM,
+        payload: search,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_LIST_FAIL,
+        payload: error,
+      });
+    }
+  };
+
+export const setSearchTerm = (search) => async (dispatch) => {
+  dispatch({
+    type: SET_SEARCH_TERM,
+    payload: search,
+  });
 };
 
 export const listProductDetails = (id) => async (dispatch) => {
