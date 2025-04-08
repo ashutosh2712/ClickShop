@@ -703,3 +703,63 @@ tbody tr:hover {
   background-color: var(--color-white);
   color: var(--color-btn);
 }
+
+/* Carousel container */
+.carouselContainer {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+/* Title */
+.carouselTitle {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Slick Slider */
+.carouselSlider {
+  position: relative;
+}
+
+/* Individual Slide */
+.carouselSlide {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Image */
+.carouselImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+/* Product Name */
+.carouselProductName {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Rating */
+.carouselProductRating {
+  color: #ff9800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+}
+
+/* Price */
+.carouselProductPrice {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+}

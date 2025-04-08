@@ -44,7 +44,7 @@ router.get("/products", async (request, response) => {
 
 router.get("/top/products", async (request, response) => {
   try {
-    const topProducts = await Products.find({ rating: { $gt: 4 } })
+    const topProducts = await Products.find({ rating: { $gte: 4 } })
       .sort({ rating: -1 })
       .limit(5);
     response.status(200).json(topProducts);

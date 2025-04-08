@@ -22,6 +22,9 @@ import {
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
   SET_SEARCH_TERM,
+  TOP_RATED_PRODUCTS_FAIL,
+  TOP_RATED_PRODUCTS_REQUEST,
+  TOP_RATED_PRODUCTS_SUCCESS,
 } from "../constants/productConstant";
 
 export const listProducts =
@@ -45,10 +48,33 @@ export const listProducts =
     } catch (error) {
       dispatch({
         type: PRODUCT_LIST_FAIL,
-        payload: error,
+        payload:
+          error.response && error.response.data.error
+            ? error.response.data.error
+            : error.message,
       });
     }
   };
+
+export const listTopProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: TOP_RATED_PRODUCTS_REQUEST });
+    const { data } = await axios.get(`http://localhost:3000/api/top/products`);
+
+    dispatch({
+      type: TOP_RATED_PRODUCTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TOP_RATED_PRODUCTS_FAIL,
+      payload:
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message,
+    });
+  }
+};
 
 export const setSearchTerm = (search) => async (dispatch) => {
   dispatch({
@@ -71,7 +97,10 @@ export const listProductDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
-      payload: error,
+      payload:
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message,
     });
   }
 };

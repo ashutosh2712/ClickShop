@@ -24,6 +24,9 @@ import {
   PRODUCT_REVIEWS_SUCCESS,
   PRODUCT_REVIEWS_FAIL,
   SET_SEARCH_TERM,
+  TOP_RATED_PRODUCTS_REQUEST,
+  TOP_RATED_PRODUCTS_SUCCESS,
+  TOP_RATED_PRODUCTS_FAIL,
 } from "../constants/productConstant";
 
 export const productListReducer = (
@@ -54,6 +57,22 @@ export const productListReducer = (
 
     case SET_SEARCH_TERM:
       return { ...state, searchTerm: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+export const topRatedProductReducer = (state = { topProducts: [] }, action) => {
+  switch (action.type) {
+    case TOP_RATED_PRODUCTS_REQUEST:
+      return { loading: true, topProducts: [] };
+
+    case TOP_RATED_PRODUCTS_SUCCESS:
+      return { loading: false, topProducts: action.payload };
+
+    case TOP_RATED_PRODUCTS_FAIL:
+      return { loading: false, error: action.payload };
 
     default:
       return state;

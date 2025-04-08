@@ -5,6 +5,7 @@ import Loading from "../components/Loading";
 import { Link } from "react-router-dom";
 import { listProducts } from "../actions/productAction";
 import Message from "../components/Message";
+import TopProductCorousel from "../components/TopProductCorousel";
 const HomePage = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +24,7 @@ const HomePage = () => {
 
   return (
     <div className="homeContainer">
+      <TopProductCorousel />
       <h1>Latest Products</h1>
       {loading ? (
         <Loading />

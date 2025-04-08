@@ -26,6 +26,6 @@ app.listen(PORT, () => {
 });
 
 mongoose
-  .connect("mongodb://localhost:27017/ecommerce")
+  .connect("mongodb://root:Mongo1234@db:27018/ecommerce?authSource=admin")
   .then(console.log("MongoDB Connection successful!"))
   .catch((err) => console.log(`Error While Connecting to MDB ${err}`));
