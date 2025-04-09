@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Users } from "../../schemas/Users.mjs";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
