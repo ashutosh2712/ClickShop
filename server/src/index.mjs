@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static("src"));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
   })
 );
 app.use("/api", testRouter);
@@ -26,6 +26,6 @@ app.listen(PORT, () => {
 });
 
 mongoose
-  .connect("mongodb://root:Mongo1234@db:27018/ecommerce?authSource=admin")
+  .connect("mongodb://root:Mongo12345@db:27017/ecommerce?authSource=admin")
   .then(console.log("MongoDB Connection successful!"))
   .catch((err) => console.log(`Error While Connecting to MDB ${err}`));

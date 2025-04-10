@@ -6,12 +6,12 @@ services:
     container_name: ecommerce-mongo-db
     restart: always
     ports:
-      - 27018:27017
+      - "27018:27017"
     volumes:
       - mongo_ecommerce_data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: Mongo1234
+      MONGO_INITDB_ROOT_PASSWORD: Mongo12345
       MONGO_INITDB_DATABASE: ecommerce
 
   backend:
@@ -22,13 +22,12 @@ services:
     restart: always
     volumes:
       - ./server:/app
-      #- /app/node_modules
     ports:
-      - 3003:3000
+      - "3003:3000"
     depends_on:
       - db
     environment:
-      - MONGO_URI=mongodb://root:Mongo1234@db:27018/ecommerce?authSource=admin
+      - MONGO_URI=mongodb://root:Mongo12345@db:27017/ecommerce?authSource=admin
     command: npm start
 
   frontend:
@@ -41,7 +40,7 @@ services:
       - ./client:/app
       - /app/node_modules
     ports:
-      - 5174:5173
+      - "5174:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true

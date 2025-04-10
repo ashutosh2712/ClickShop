@@ -29,20 +29,18 @@ import {
 } from "../constants/userConstants";
 import axios from "axios";
 
+const API_BASE_URL = "http://localhost:3003";
 export const register =
   (username, email, password, confirmPassword) => async (dispatch) => {
     try {
       dispatch({ type: USER_REGISTER_REQUEST });
 
-      const { data } = await axios.post(
-        `http://localhost:3000/api/auth/register`,
-        {
-          username,
-          email,
-          password,
-          confirmPassword,
-        }
-      );
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+        username,
+        email,
+        password,
+        confirmPassword,
+      });
 
       dispatch({
         type: USER_REGISTER_SUCCESS,
@@ -70,7 +68,7 @@ export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
 
-    const { data } = await axios.post(`http://localhost:3000/api/auth/login`, {
+    const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, {
       email,
       password,
     });
@@ -108,7 +106,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await axios.get(`http://localhost:3000/api/user/${id}`, {
+    const { data } = await axios.get(`${API_BASE_URL}/api/user/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -136,7 +134,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.put(
-      `http://localhost:3000/api/update/profile/`,
+      `${API_BASE_URL}/api/update/profile/`,
       {
         username: user.username,
         email: user.email,
@@ -178,7 +176,7 @@ export const listUsers = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await axios.get(`http://localhost:3000/api/users`, {
+    const { data } = await axios.get(`${API_BASE_URL}/api/users`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -206,7 +204,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.put(
-      `http://localhost:3000/api/update/user/${user._id}`,
+      `${API_BASE_URL}/api/update/user/${user._id}`,
       user,
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -235,7 +233,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    await axios.delete(`http://localhost:3000/api/delete/user/${id}`, {
+    await axios.delete(`${API_BASE_URL}/api/delete/user/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 

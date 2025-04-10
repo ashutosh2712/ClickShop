@@ -21,6 +21,8 @@ import {
   ORDER_PAY_SUCCESS,
 } from "../constants/orderConstants";
 
+const API_BASE_URL = "http://localhost:3003";
+
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_CREATE_REQUEST });
@@ -30,7 +32,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.post(
-      `http://localhost:3000/api/order/create`,
+      `${API_BASE_URL}/api/order/create`,
       order,
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -68,7 +70,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.get(
-      `http://localhost:3000/api/order/${id}`,
+      `${API_BASE_URL}/api/order/${id}`,
 
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -99,7 +101,7 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.patch(
-      `http://localhost:3000/api/order/${id}/pay`,
+      `${API_BASE_URL}/api/order/${id}/pay`,
       paymentResult,
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -130,7 +132,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     } = getState();
 
     const { data } = await axios.patch(
-      `http://localhost:3000/api/order/${order._id}/delivered`,
+      `${API_BASE_URL}/api/order/${order._id}/delivered`,
       {},
       {
         headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -160,7 +162,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await axios.get(`http://localhost:3000/api/myorders`, {
+    const { data } = await axios.get(`${API_BASE_URL}/api/myorders`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -187,7 +189,7 @@ export const listOrders = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await axios.get(`http://localhost:3000/api/orders`, {
+    const { data } = await axios.get(`${API_BASE_URL}/api/orders`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 

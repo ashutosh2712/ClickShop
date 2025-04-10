@@ -1,20 +1,21 @@
-# Use an official Node.js image as the base
+
+# It uses the official Node.js 20 Alpine image as the base image.
 FROM node:20-alpine
 
-# Set the working directory in the container
+# Create app directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+#copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 
-# Install dependencies
+# Install app dependencies
 RUN npm install
 
-# Copy the Vite project files
+#copy the rest of the app source code
 COPY . .
 
-# Expose the Vite development server port
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Command to start 
+# Start the app
 CMD ["npm", "start"]
