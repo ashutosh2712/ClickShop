@@ -3,24 +3,26 @@ import { Products } from "../../schemas/Products.mjs";
 import mongoose from "mongoose";
 import adminAuthenticated from "../../middlewares/adminAuthenticated.mjs";
 import authenticatedUser from "../../middlewares/authenticatedUser.mjs";
-import multer from "multer";
+
 import { Reviews } from "../../schemas/Reviews.mjs";
+import upload from "../../middlewares/s3Uploader.mjs";
 const router = Router();
+const DEFAULT_IMAGE_S3_URL =
+  "https://clickshop-images.s3.us-east-1.amazonaws.com/sample.jpg";
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "src/uploads");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   },
+// });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
+//const upload = multer({ storage });
 
 router.get("/products", async (request, response) => {
   const { search, page = 1, limit = 3 } = request.query;
-
+  console.log("process.env in product", process.env.S3_BUCKET_NAME);
   try {
     let query = {};
     if (search) {
@@ -85,9 +87,9 @@ router.post(
 
     let image = null;
     if (request.file) {
-      image = request.file.filename;
+      image = request.file.location;
     } else {
-      image = "sample.jpg";
+      image = DEFAULT_IMAGE_S3_URL;
     }
 
     const newProduct = new Products({
@@ -122,9 +124,9 @@ router.put(
 
     let image = null;
     if (request.file) {
-      image = request.file.filename;
+      image = request.file.location;
     } else {
-      image = "sample.jpg";
+      image = DEFAULT_IMAGE_S3_URL;
     }
 
     const { id } = request.params;
